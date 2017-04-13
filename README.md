@@ -11,6 +11,7 @@
 - `SECRET_NAME`,`CONFIG_NAME` default to `APP_NAME`
 - `ENV_NAME` defaults to 'system'
 - `CW_LOG_GROUP` defaults to 'kubernetes-cluster'
+- `KUBECTL` defaults to 'kubectl', path to `kubectl` tool
 
 3. Set environment variables for the AWS IAM user and CloudWatch region or set them just when running `deploy.sh` in the next step
 ```

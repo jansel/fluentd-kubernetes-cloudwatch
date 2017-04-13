@@ -1,10 +1,11 @@
 #!/bin/bash
 
 # Usage:
-#   ./Display.sh
-#   ./Display.sh -o yaml
+#   ./display.sh
+#   ./display.sh -o yaml
 
 : ${APP_NAME:=fluentd-cloudwatch}
 : ${NAMESPACE:=kube-system}
+: ${KUBECTL:=kubectl}
 
-kubectl get secret,configmap,daemonset,pod --selector=app=$APP_NAME --namespace=$NAMESPACE $@
+$KUBECTL get secret,configmap,daemonset,pod --selector=app=$APP_NAME --namespace=$NAMESPACE $@

@@ -16,18 +16,19 @@ set -e
 : ${NAMESPACE:=kube-system}
 : ${IMAGE_NAME:=callstats/fluentd-kubernetes-cloudwatch:v1.1.2}
 : ${CW_LOG_GROUP:=kubernetes-cluster}
+: ${KUBECTL:=kubectl}
 
 #
 # Secret
 #
 
-if [[ "$(kubectl get secret $SECRET_NAME --namespace=$NAMESPACE --output name 2> /dev/null || true)" = "secret/${SECRET_NAME}" ]]; then
+if [[ "$($KUBECTL get secret $SECRET_NAME --namespace=$NAMESPACE --output name 2> /dev/null || true)" = "secret/${SECRET_NAME}" ]]; then
   ACTION=replace
 else
   ACTION=create
 fi
 
-kubectl $ACTION -f - <<END
+$KUBECTL $ACTION -f - <<END
 apiVersion: v1
 kind: Secret
 type: kubernetes.io/opaque
@@ -46,7 +47,7 @@ END
 # ConfigMap
 #
 
-kubectl apply -f - <<END
+$KUBECTL apply -f - <<END
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -65,4 +66,4 @@ END
 #
 
 export APP_NAME ENV_NAME CONFIG_NAME SECRET_NAME NAMESPACE IMAGE_NAME
-envsubst < fluentd-cloudwatch-daemonset-template.yaml | kubectl apply -f -
+envsubst < fluentd-cloudwatch-daemonset-template.yaml | $KUBECTL apply -f -
